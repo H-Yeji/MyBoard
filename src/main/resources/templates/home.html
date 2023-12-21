@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+ .fieldError {
+ border-color: #bd2130;
+ }
+</style>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="header" th:fragment="bodyHeader">
+                <a href="/"><h3 class="text-muted">MY BOARD</h3></a>
+            </div>
+            <div class="py-1 text-center">
+                <h2>글 목록</h2>
+            </div>
+            <div class="button-container">
+                <button type="button" class="btn btn-primary btn-secondary"
+                        onclick="location.href='createMemberForm.html'"
+                        th:onclick="|location.href='@{/members/new}'|">로그인</button>
+                <button type="button" class="btn btn-primary btn-secondary"
+                        onclick="location.href='createMemberForm.html'"
+                        th:onclick="|location.href='@{/members/new}'|">회원 가입</button>
+            </div>
+            <form role="form" action="/boards/list" th:object="${boardForm}"
+                  method="post">
+                <div class="form-group">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Title</th>
+                            <th>Writer</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="board : ${boardList}">
+                            <td th:text = "${board.id}">1</td>
+                            <td>
+                                <a th:text = "${board.title}" th:href="@{/boards/list/{id}(id=${board.id})}">제목입니다.</a>
+                            </td>
+                            <td th:text = "${board.writer}">작성자입니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            <br/>
+            <div th:replace="fragments/footer :: footer" />
+        </div>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>
