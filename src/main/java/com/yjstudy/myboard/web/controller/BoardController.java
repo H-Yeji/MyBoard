@@ -54,8 +54,19 @@ public class BoardController {
     public String boardView(@PathVariable int id, Model model) {
 
         Optional<Board> board = boardRepository.findById(id);
-        model.addAttribute("board", board);
+        model.addAttribute("board", board.orElse(null));
 
         return "boards/boardView";
+    }
+
+    /**
+     * 게시글 삭제
+     */
+    @GetMapping("/boards/delete/{id}")
+    public String boardDelete(@PathVariable int id) {
+
+        boardService.delete(id);
+
+        return "redirect:/boards/list";
     }
 }

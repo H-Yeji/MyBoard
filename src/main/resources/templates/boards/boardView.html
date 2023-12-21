@@ -28,7 +28,6 @@
           <textarea th:field="*{board.content}" class="form-control" readonly></textarea>
         </div>
         <br/>
-
       </form>
       <br/>
       <div class="row">
@@ -39,7 +38,8 @@
         </div>
         <div class="col">
           <button class="w-100 btn btn-primary btn-lg btn-primary"
-                  onclick="location.href='boardDelete.html'"
+                  onclick="location.href='boardList.html'"
+                  th:onclick="|location.href='@{/boards/delete/{id}(id=${board.id})}'|"
                   type="button">Delete</button>
         </div>
         <div class="col">
