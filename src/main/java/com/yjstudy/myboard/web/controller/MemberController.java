@@ -44,6 +44,6 @@ public class MemberController {
         member.setEmail(memberForm.getEmail());
 
         memberService.join(member);
-        return "redirect:/boards/list"; // 첫번째 페이지로 돌아감
+        return "redirect:/boards"; // 첫번째 페이지로 돌아감
     }
 }
