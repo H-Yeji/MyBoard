@@ -88,7 +88,6 @@ public class BoardController {
         Board board = boardService.detail(id); //id로 게시물 찾아옴
 
         BoardForm form = new BoardForm();
-        form.setId(board.getId());
         form.setWriter(board.getWriter());
         form.setTitle(board.getTitle());
         form.setContent(board.getContent());
