@@ -31,7 +31,7 @@ public class MemberController {
      * 회원 가입 진행
      */
     @PostMapping("/members/new")
-    public String create(@Valid AddMemberForm memberForm, BindingResult result) {
+    public String create(@Valid AddMemberForm memberForm, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
             return "members/createMemberForm";
@@ -44,6 +44,10 @@ public class MemberController {
         member.setEmail(memberForm.getEmail());
 
         memberService.join(member);
-        return "redirect:/boards"; // 첫번째 페이지로 돌아감
+
+        model.addAttribute("message", "회원가입이 완료되었습니다.");
+        model.addAttribute("searchUrl", "/boards");
+
+        return "message";
     }
 }

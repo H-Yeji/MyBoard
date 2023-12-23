@@ -32,10 +32,14 @@ public class BoardController {
      * 게시물 등록
      */
     @PostMapping("/boards/new")
-    public String registerPost(Board board) {
+    public String registerPost(Board board, Model model) {
 
         boardService.addPost(board);
-        return "redirect:/boards"; //게시글 목록 페이지로 리다이렉트
+
+        model.addAttribute("message", "글 작성이 완료되었습니다.");
+        model.addAttribute("searchUrl", "/boards");
+
+        return "message"; //메시지 알림창으로 반환
     }
 
     /**
@@ -65,11 +69,14 @@ public class BoardController {
      * 게시글 삭제
      */
     @GetMapping("/boards/{id}/delete")
-    public String boardDelete(@PathVariable int id) {
+    public String boardDelete(@PathVariable int id, Model model) {
 
         boardService.delete(id);
 
-        return "redirect:/boards";
+        model.addAttribute("message", "글이 삭제되었습니다.");
+        model.addAttribute("searchUrl", "/boards");
+
+        return "message";
     }
 
     /**
@@ -94,10 +101,13 @@ public class BoardController {
      * 게시글 수정 진행
      */
     @PostMapping("/boards/{id}/edit")
-    public String boardEdit(@PathVariable int id, @ModelAttribute("boardForm") BoardForm boardForm) {
+    public String boardEdit(@PathVariable int id, @ModelAttribute("boardForm") BoardForm boardForm, Model model) {
 
         boardService.update(id, boardForm.getTitle(), boardForm.getContent());
 
-        return "redirect:/boards";
+        model.addAttribute("message", "글 수정이 완료되었습니다.");
+        model.addAttribute("searchUrl", "/boards");
+
+        return "message";
     }
 }
