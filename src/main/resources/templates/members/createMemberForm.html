@@ -48,7 +48,11 @@
         <div class="form-group">
           <label th:for="email">E-mail</label>
           <input type="text" th:field="*{email}" class="form-control"
-                 placeholder="이메일을 입력하세요">
+                 placeholder="이메일을 입력하세요"
+                 th:class="${#fields.hasErrors('email')}? 'form-control
+             fieldError' : 'form-control'">
+          <p th:if="${#fields.hasErrors('email')}"
+             th:errors="*{email}">Incorrect date</p>
         </div>
         <br/>
         <button type="submit" class="w-100 btn btn-primary">Submit</button>
