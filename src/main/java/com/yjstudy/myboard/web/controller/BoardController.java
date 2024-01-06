@@ -4,6 +4,7 @@ import com.yjstudy.myboard.domain.Board;
 import com.yjstudy.myboard.repository.BoardRepository;
 import com.yjstudy.myboard.service.BoardService;
 import com.yjstudy.myboard.web.form.BoardForm;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -20,16 +21,27 @@ public class BoardController {
     private final BoardService boardService;
 
     /**
-     * 게시물 등록 폼 열기
+     * 게시글 등록 폼 열기
      */
     @GetMapping("/boards/new")
-    public String createPostForm(Model model) {
+    public String createPostForm(Model model, HttpSession session) {
 
-        model.addAttribute("boardForm", new BoardForm());
+        BoardForm boardForm = new BoardForm();
+
+        //사용자 컨텍스트에서 로그인한 사용자의 loginId 검색
+        String loggedInUserId = (String) session.getAttribute("loggedInUserId");
+
+        if (loggedInUserId != null) {
+            boardForm.setWriter(loggedInUserId); //session에서 찾아온 회원id를 boardForm에 뿌리기
+            log.info("loggedInUserId in createPostForm: {}", loggedInUserId);
+        }
+
+        model.addAttribute("boardForm", boardForm);
+
         return "boards/createBoardForm";
     }
     /**
-     * 게시물 등록
+     * 게시글 등록
      */
     @PostMapping("/boards/new")
     public String registerPost(Board board, Model model) {
@@ -80,7 +92,7 @@ public class BoardController {
     }
 
     /**
-     * 상품 수정 폼
+     * 게시글 수정 폼
      */
     @GetMapping("/boards/{id}/edit")
     public String boardEditForm(@PathVariable int id, Model model) {
