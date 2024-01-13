@@ -5,6 +5,7 @@ import com.yjstudy.myboard.repository.BoardRepository;
 import com.yjstudy.myboard.service.BoardService;
 import com.yjstudy.myboard.web.form.BoardForm;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -44,7 +45,12 @@ public class BoardController {
      * 게시글 등록
      */
     @PostMapping("/boards/new")
-    public String registerPost(Board board, Model model) {
+    public String registerPost(@Valid BoardForm form, Model model) {
+
+        Board board = new Board();
+        board.setWriter(form.getWriter());
+        board.setTitle(form.getTitle());
+        board.setContent(form.getContent());
 
         boardService.addPost(board);
 
