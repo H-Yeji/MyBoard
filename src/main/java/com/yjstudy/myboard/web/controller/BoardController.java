@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class BoardController {
      * 게시글 등록
      */
     @PostMapping("/boards/new")
-    public String registerPost(@Valid BoardForm form, Model model) {
+    public String registerPost(@ModelAttribute BoardForm form, RedirectAttributes redirectAttributes) {
 
         Board board = new Board();
         board.setWriter(form.getWriter());
@@ -54,10 +55,10 @@ public class BoardController {
 
         boardService.addPost(board);
 
-        model.addAttribute("message", "글 작성이 완료되었습니다.");
-        model.addAttribute("searchUrl", "/boards");
+        redirectAttributes.addAttribute("boardId", board.getId());
+        redirectAttributes.addFlashAttribute("result", "registerOK");
 
-        return "message"; //메시지 알림창으로 반환
+        return "redirect:/boards/{boardId}";
     }
 
     /**
@@ -118,13 +119,14 @@ public class BoardController {
      * 게시글 수정 진행
      */
     @PostMapping("/boards/{id}/edit")
-    public String boardEdit(@PathVariable int id, @ModelAttribute("boardForm") BoardForm boardForm, Model model) {
+    public String boardEdit(@PathVariable int id, @ModelAttribute("boardForm") BoardForm boardForm,
+                            RedirectAttributes redirectAttributes) {
 
         boardService.update(id, boardForm.getTitle(), boardForm.getContent());
 
-        model.addAttribute("message", "글 수정이 완료되었습니다.");
-        model.addAttribute("searchUrl", "/boards");
+        redirectAttributes.addAttribute("boardId", id);
+        redirectAttributes.addFlashAttribute("result", "modifyOK");
 
-        return "message";
+        return "redirect:/boards/{boardId}";
     }
 }
