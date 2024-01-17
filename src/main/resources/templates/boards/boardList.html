@@ -12,18 +12,18 @@
     <div class="col-md-8 offset-md-2">
       <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
       <div class="py-1 text-center">
-        <h2>글 목록</h2>
+        <h2 th:text="#{page.boardList}">글 목록</h2>
       </div>
       <form role="form" action="/boards" method="post">
         <div class="form-group">
           <button type="button" class="btn btn-primary btn-secondary float-end"
-                  onclick="location.href='/boards/new'">글 작성</button>
+                  onclick="location.href='/boards/new'" th:text="#{button.newBoard}">글 작성</button>
           <table class="table">
             <thead>
               <tr>
-                <th>No</th>
-                <th>Title</th>
-                <th>Writer</th>
+                <th th:text="#{label.board.id}">No</th>
+                <th th:text="#{label.board.title}">Title</th>
+                <th th:text="#{label.board.writer}">Writer</th>
               </tr>
             </thead>
             <tbody>
