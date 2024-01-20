@@ -14,15 +14,15 @@
                 <a href="/"><h3 class="text-muted">MY BOARD</h3></a>
             </div>
             <div class="py-1 text-center">
-                <h2>글 목록</h2>
+                <h2 th:text="#{page.boardList}">글 목록</h2>
             </div>
             <div class="button-container">
                 <button type="button" class="btn btn-primary btn-secondary"
                         onclick="location.href='createMemberForm.html'"
-                        th:onclick="|location.href='@{/members/new}'|">로그인</button>
+                        th:onclick="|location.href='@{/members/new}'|" th:text="#{button.login}">로그인</button>
                 <button type="button" class="btn btn-primary btn-secondary"
                         onclick="location.href='createMemberForm.html'"
-                        th:onclick="|location.href='@{/members/new}'|">회원 가입</button>
+                        th:onclick="|location.href='@{/members/new}'|" th:text="#{button.newMember}">회원 가입</button>
             </div>
             <form role="form" action="/boards" th:object="${boardForm}"
                   method="post">
