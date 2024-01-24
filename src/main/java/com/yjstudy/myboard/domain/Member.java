@@ -18,16 +18,12 @@ public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private String username;
 
-    @NotBlank
     private String loginId;
 
-    @NotBlank
     private String password;
 
-    @Email
     private String email;
 
 }

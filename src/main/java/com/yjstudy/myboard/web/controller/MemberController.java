@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -34,17 +36,18 @@ public class MemberController {
      * 회원 가입 진행
      */
     @PostMapping("/members/new")
-    public String create(@Valid AddMemberForm memberForm, BindingResult result, Model model, HttpSession session) {
+    public String create(@Validated @ModelAttribute AddMemberForm addMemberForm, BindingResult result, Model model, HttpSession session) {
 
         if (result.hasErrors()) {
+            log.info("errors={}", result);
             return "members/createMemberForm";
         }
 
         Member member = new Member();
-        member.setLoginId(memberForm.getLoginId());
-        member.setPassword(memberForm.getPassword());
-        member.setUsername(memberForm.getUsername());
-        member.setEmail(memberForm.getEmail());
+        member.setLoginId(addMemberForm.getLoginId());
+        member.setPassword(addMemberForm.getPassword());
+        member.setUsername(addMemberForm.getUsername());
+        member.setEmail(addMemberForm.getEmail());
 
         memberService.join(member);
 
