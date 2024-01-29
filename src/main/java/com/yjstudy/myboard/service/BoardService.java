@@ -52,10 +52,10 @@ public class BoardService {
     @Transactional
     public void update(int id, String title, String content) {
 
-        Optional<Board> optionalBoard = boardRepository.findById(id);
+        Optional<Board> board = boardRepository.findById(id);
 
-        if (optionalBoard.isPresent()) {
-            Board findPost = optionalBoard.get();
+        if (board.isPresent()) {
+            Board findPost = board.get();
             findPost.setTitle(title);
             findPost.setContent(content);
         }

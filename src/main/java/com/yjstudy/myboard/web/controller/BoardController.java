@@ -46,7 +46,7 @@ public class BoardController {
      * 게시글 등록
      */
     @PostMapping("/boards/new")
-    public String registerPost(@ModelAttribute BoardForm form, RedirectAttributes redirectAttributes) {
+    public String registerPost(@ModelAttribute("boardForm") BoardForm form, RedirectAttributes redirectAttributes) {
 
         Board board = new Board();
         board.setWriter(form.getWriter());
