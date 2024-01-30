@@ -2,7 +2,7 @@ package com.yjstudy.myboard.repository;
 
 import com.yjstudy.myboard.domain.Member;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -27,11 +27,7 @@ public class MemberRepository {
     /**
      * 조회
      */
-    public Member findOne(String loginId) {
-        return em.find(Member.class, loginId);
-    }
-
-    public List<Member> findAll() {
+    public List<Member> findAll() { //전체 조회
 
         List<Member> result = em.createQuery("select m from Member m", Member.class)
                 .getResultList();
@@ -39,12 +35,20 @@ public class MemberRepository {
         return result;
     }
 
-    public List<Member> findByLoginId(String loginId) {
-
-        List<Member> result = em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
-                .setParameter("loginId", loginId)
-                .getResultList();
-
-        return result;
+    public Member findOne(Long id) { //id로 회원 한명 조회
+        return em.find(Member.class, id);
     }
+
+    public Member findByLoginId(String loginId) { //loginId로 회원 한명 조회
+
+        try {
+            Member result = em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
+                    .setParameter("loginId", loginId)
+                    .getSingleResult();
+            return result;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 }
