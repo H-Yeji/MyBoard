@@ -4,7 +4,6 @@ import com.yjstudy.myboard.domain.Member;
 import com.yjstudy.myboard.service.MemberService;
 import com.yjstudy.myboard.web.form.AddMemberForm;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -54,10 +53,10 @@ public class MemberController {
         //사용자 컨텍스트에 loginId 저장
         session.setAttribute("loggedInUserId", member.getLoginId());
 
-        log.info("LoggedInUserId: {}", member.getLoginId());
+        log.info("회원가입 성공: {}", member.getLoginId());
 
         model.addAttribute("message", "회원가입이 완료되었습니다.");
-        model.addAttribute("searchUrl", "/boards");
+        model.addAttribute("searchUrl", "/");
 
         return "message";
     }
