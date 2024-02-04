@@ -21,13 +21,13 @@
 
         <div class="row">
           <div class="col">
-            <button type="button" class="w-100 btn btn-primary btn-secondary"
+            <button type="button" class="w-100 btn btn-primary btn-lg"
                     onclick="location.href='boardList.html'"
                     th:onclick="|location.href='@{/boards}'|" th:text="#{button.list}">글 목록</button>
           </div>
           <div class="col">
             <form th:action="@{/logout}" method="post">
-              <button type="submit" class="w-100 btn btn-primary btn-secondary"
+              <button type="submit" class="w-100 btn btn-secondary btn-lg"
                       onclick="location.href='home.html'" th:text="#{button.logout}">로그아웃</button>
             </form>
           </div>

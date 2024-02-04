@@ -32,19 +32,19 @@
       <br/>
       <div class="row">
         <div class="col">
-          <button class="w-100 btn btn-primary btn-lg btn-primary"
+          <button class="w-100 btn btn-primary btn-lg"
                   onclick="location.href='updateBoardForm.html'"
                   th:onclick="|location.href='@{/boards/{id}/edit (id=${board.id})}'|"
                   type="button" th:text="#{button.edit}">Edit</button>
         </div>
         <div class="col">
-          <button class="w-100 btn btn-primary btn-lg btn-primary"
+          <button class="w-100 btn btn-primary btn-lg"
                   onclick="location.href='boardList.html'"
                   th:onclick="|location.href='@{/boards/{id}/delete (id=${board.id})}'|"
                   type="button" th:text="#{button.delete}">Delete</button>
         </div>
         <div class="col">
-          <button class="w-100 btn btn-primary btn-lg btn-secondary"
+          <button class="w-100 btn btn-secondary btn-lg"
                   onclick="location.href='boardList.html'"
                   th:onclick="|location.href='@{/boards}'|"
                   type="button" th:text="#{button.list}">List</button>

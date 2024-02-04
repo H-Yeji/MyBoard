@@ -58,7 +58,7 @@ public class LoginController {
         session.setAttribute(LOGIN_MEMBER, loginMember);
         log.info("로그인 성공 : {}", loginMember);
 
-        return "redirect:/"; //홈으로 리다이렉트
+        return "redirect:/";
 
     }
 

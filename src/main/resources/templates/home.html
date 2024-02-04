@@ -1,11 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header" />
-<style>
- .fieldError {
- border-color: #bd2130;
- }
-</style>
 <body>
 <div class="container">
     <div class="row">
@@ -20,12 +15,12 @@
             <br>
             <div class="row">
                 <div class="col">
-                    <button type="button" class="w-100 btn btn-primary btn-secondary"
+                    <button type="button" class="w-100 btn btn-primary btn-lg"
                             onclick="location.href='loginForm.html'"
                             th:onclick="|location.href='@{/login}'|" th:text="#{button.login}">로그인</button>
                 </div>
                 <div class="col">
-                    <button type="button" class="w-100 btn btn-primary btn-secondary"
+                    <button type="button" class="w-100 btn btn-secondary btn-lg"
                             onclick="location.href='createMemberForm.html'"
                             th:onclick="|location.href='@{/members/new}'|" th:text="#{button.newMember}">회원 가입</button>
                 </div>

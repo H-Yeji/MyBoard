@@ -2,8 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header" />
 <style>
- .fieldError {
+ .field-error {
  border-color: #bd2130;
+ color: #dc3545;
  }
  </style>
 <body>
@@ -38,10 +39,10 @@
         <br>
         <div class="row">
           <div class="col">
-            <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.login}">로그인</button>
+            <button class="w-100 btn btn-primary" type="submit" th:text="#{button.login}">로그인</button>
           </div>
           <div class="col">
-            <button class="w-100 btn btn-secondary btn-lg" onclick="location.href='boardList.html'"
+            <button class="w-100 btn btn-secondary" onclick="location.href='boardList.html'"
                     th:onclick="|location.href='@{/}'|"
                     type="button" th:text="#{button.cancel}">취소</button>
           </div>
