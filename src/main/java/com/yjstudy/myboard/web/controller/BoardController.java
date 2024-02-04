@@ -1,9 +1,11 @@
 package com.yjstudy.myboard.web.controller;
 
 import com.yjstudy.myboard.domain.Board;
+import com.yjstudy.myboard.domain.Member;
 import com.yjstudy.myboard.repository.BoardRepository;
 import com.yjstudy.myboard.service.BoardService;
 import com.yjstudy.myboard.web.form.BoardForm;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
+
+import static com.yjstudy.myboard.web.SessionConst.LOGIN_MEMBER;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,16 +30,16 @@ public class BoardController {
      * 게시글 등록 폼 열기
      */
     @GetMapping("/boards/new")
-    public String createPostForm(Model model, HttpSession session) {
+    public String createPostForm(Model model, HttpServletRequest request) {
 
         BoardForm boardForm = new BoardForm();
 
-        //사용자 컨텍스트에서 로그인한 사용자의 loginId 검색
-        String loggedInUserId = (String) session.getAttribute("loggedInUserId");
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member) session.getAttribute(LOGIN_MEMBER);
 
-        if (loggedInUserId != null) {
-            boardForm.setWriter(loggedInUserId); //session에서 찾아온 회원id를 boardForm에 뿌리기
-            log.info("loggedInUserId in createPostForm: {}", loggedInUserId);
+        if (loginMember != null) {
+            boardForm.setWriter(loginMember.getLoginId()); //session에서 찾아온 회원id를 boardForm에 뿌리기
+            log.info("작성자 : ", loginMember.getLoginId());
         }
 
         model.addAttribute("boardForm", boardForm);
@@ -65,8 +69,12 @@ public class BoardController {
      * 게시글 목록
      */
     @GetMapping("/boards")
-    public String boardList(Model model) {
+    public String boardList(Model model, HttpServletRequest request) {
 
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member) session.getAttribute(LOGIN_MEMBER);
+
+        model.addAttribute("member", loginMember);
         model.addAttribute("boardList", boardService.boardList());
         return "boards/boardList";
     }
