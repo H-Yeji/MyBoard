@@ -35,7 +35,7 @@ public class MemberController {
      * 회원 가입 진행
      */
     @PostMapping("/members/new")
-    public String create(@Validated @ModelAttribute AddMemberForm addMemberForm, BindingResult result, Model model, HttpSession session) {
+    public String create(@Validated @ModelAttribute AddMemberForm addMemberForm, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
             log.info("errors={}", result);
@@ -49,11 +49,6 @@ public class MemberController {
         member.setEmail(addMemberForm.getEmail());
 
         memberService.join(member);
-
-        //사용자 컨텍스트에 loginId 저장
-        session.setAttribute("loggedInUserId", member.getLoginId());
-
-        log.info("회원가입 성공: {}", member.getLoginId());
 
         model.addAttribute("message", "회원가입이 완료되었습니다.");
         model.addAttribute("searchUrl", "/");
