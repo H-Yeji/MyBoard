@@ -48,11 +48,16 @@ public class MemberController {
         member.setUsername(addMemberForm.getUsername());
         member.setEmail(addMemberForm.getEmail());
 
-        memberService.join(member);
+        try {
+            memberService.join(member);
+            model.addAttribute("message", "회원가입이 완료되었습니다.");
+            model.addAttribute("searchUrl", "/");
+            return "message";
 
-        model.addAttribute("message", "회원가입이 완료되었습니다.");
-        model.addAttribute("searchUrl", "/");
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", "이미 존재하는 아이디입니다.");
+            return "members/createMemberForm";
+        }
 
-        return "message";
     }
 }
