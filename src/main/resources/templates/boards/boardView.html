@@ -31,13 +31,13 @@
       </form>
       <br/>
       <div class="row">
-        <div class="col">
+        <div class="col" th:if="${board.writer == member.loginId}">
           <button class="w-100 btn btn-primary btn-lg"
                   onclick="location.href='updateBoardForm.html'"
                   th:onclick="|location.href='@{/boards/{id}/edit (id=${board.id})}'|"
                   type="button" th:text="#{button.edit}">Edit</button>
         </div>
-        <div class="col">
+        <div class="col" th:if="${board.writer == member.loginId}">
           <button class="w-100 btn btn-primary btn-lg"
                   onclick="location.href='boardList.html'"
                   th:onclick="|location.href='@{/boards/{id}/delete (id=${board.id})}'|"

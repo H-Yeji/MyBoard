@@ -22,12 +22,18 @@ public class TestDataInit {
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
 
-        Member member = new Member();
-        member.setLoginId("yejissss");
-        member.setPassword("aaaaa11111.");
-        member.setUsername("yeji");
+        Member memberA = new Member();
+        memberA.setLoginId("membera");
+        memberA.setPassword("aaaaa11111.");
+        memberA.setUsername("a");
 
-        memberRepository.save(member);
+        Member memberB = new Member();
+        memberB.setLoginId("memberb");
+        memberB.setPassword("aaaaa11111.");
+        memberB.setUsername("b");
+
+        memberRepository.save(memberA);
+        memberRepository.save(memberB);
 
     }
 }

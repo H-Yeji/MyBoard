@@ -4,6 +4,7 @@ import com.yjstudy.myboard.domain.Board;
 import com.yjstudy.myboard.domain.Member;
 import com.yjstudy.myboard.repository.BoardRepository;
 import com.yjstudy.myboard.service.BoardService;
+import com.yjstudy.myboard.service.MemberService;
 import com.yjstudy.myboard.web.form.BoardForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +26,7 @@ import static com.yjstudy.myboard.web.SessionConst.LOGIN_MEMBER;
 public class BoardController {
 
     private final BoardService boardService;
+    private final MemberService memberService;
 
     /**
      * 게시글 등록 폼 열기
@@ -83,11 +85,15 @@ public class BoardController {
      * 게시글 상세보기
      */
     @GetMapping("/boards/{id}")
-    public String boardView(@PathVariable int id, Model model) {
+    public String boardView(@PathVariable int id, Model model, HttpServletRequest request) {
 
-        Board board = boardService.detail(id);
+        Board board = boardService.detail(id); //해당 id의 게시글 찾기
+
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member) session.getAttribute(LOGIN_MEMBER);
 
         model.addAttribute("board", board);
+        model.addAttribute("member", loginMember);
 
         return "boards/boardView";
     }
