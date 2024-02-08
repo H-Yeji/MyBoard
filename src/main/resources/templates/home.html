@@ -26,6 +26,14 @@
                 </div>
             </div>
             <br/>
+
+            <script>
+                var result = '[[${result}]]';
+                if (result === 'addOK') {
+                    alert('회원가입이 완료되었습니다.');
+                }
+
+            </script>
             <div th:replace="fragments/footer :: footer" />
         </div>
     </div>
