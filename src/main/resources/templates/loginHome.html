@@ -26,6 +26,12 @@
                     th:onclick="|location.href='@{/boards}'|" th:text="#{button.list}">글 목록</button>
           </div>
           <div class="col">
+            <button type="button" class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='home.html'"
+                    th:onclick="|location.href='@{/members/{id} (id=${member.id})}'|"
+                    th:text="#{button.mypage}">마이페이지</button>
+          </div>
+          <div class="col">
             <form th:action="@{/logout}" method="post">
               <button type="submit" class="w-100 btn btn-secondary btn-lg"
                       onclick="location.href='home.html'" th:text="#{button.logout}">로그아웃</button>
