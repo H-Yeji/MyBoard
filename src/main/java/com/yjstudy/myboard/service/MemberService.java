@@ -57,4 +57,23 @@ public class MemberService {
     public Member findOne(Long id) {
         return memberRepository.findOne(id);
     }
+
+    /**
+     * 회원 정보 수정 -> 변경 감지 기능 사용
+     */
+    @Transactional
+    public void update(Long id, String username, String email) {
+
+        //회원 조회해서 가져오기
+        Member member = memberRepository.findOne(id);
+
+        if (member != null) {
+            member.setUsername(username);
+            member.setEmail(email);
+        }
+        else {
+            log.warn("id {} not found", id);
+        }
+
+    }
 }
