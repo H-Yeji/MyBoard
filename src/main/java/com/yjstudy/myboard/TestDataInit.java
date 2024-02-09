@@ -23,14 +23,16 @@ public class TestDataInit {
     public void init() {
 
         Member memberA = new Member();
-        memberA.setLoginId("membera");
+        memberA.setLoginId("aa");
         memberA.setPassword("aaaaa11111.");
-        memberA.setUsername("a");
+        memberA.setUsername("첫번째회원");
+        memberA.setEmail("aaa@naver.com");
 
         Member memberB = new Member();
-        memberB.setLoginId("memberb");
+        memberB.setLoginId("bb");
         memberB.setPassword("aaaaa11111.");
-        memberB.setUsername("b");
+        memberB.setUsername("두번째회원");
+        memberB.setEmail("bbb@naver.com");
 
         memberRepository.save(memberA);
         memberRepository.save(memberB);
