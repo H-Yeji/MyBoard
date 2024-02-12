@@ -2,7 +2,6 @@ package com.yjstudy.myboard.web.controller;
 
 import com.yjstudy.myboard.domain.Member;
 import com.yjstudy.myboard.service.LoginService;
-import com.yjstudy.myboard.web.SessionConst;
 import com.yjstudy.myboard.web.form.LoginForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -14,8 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import javax.naming.Binding;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import static com.yjstudy.myboard.web.SessionConst.LOGIN_MEMBER;
 
@@ -39,6 +37,7 @@ public class LoginController {
      */
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult,
+                        @RequestParam(defaultValue = "/") String redirectURL,
                         HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
@@ -58,7 +57,10 @@ public class LoginController {
         session.setAttribute(LOGIN_MEMBER, loginMember);
         log.info("로그인 성공 : {}", loginMember);
 
-        return "redirect:/";
+        //debug
+        log.info("Redirecting to : {}", redirectURL);
+
+        return "redirect:" + redirectURL;
 
     }
 
