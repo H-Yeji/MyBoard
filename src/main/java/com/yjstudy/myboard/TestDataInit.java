@@ -2,7 +2,6 @@ package com.yjstudy.myboard;
 
 import com.yjstudy.myboard.domain.Member;
 import com.yjstudy.myboard.repository.MemberRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;

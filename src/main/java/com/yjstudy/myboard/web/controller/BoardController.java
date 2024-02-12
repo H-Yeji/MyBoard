@@ -2,13 +2,11 @@ package com.yjstudy.myboard.web.controller;
 
 import com.yjstudy.myboard.domain.Board;
 import com.yjstudy.myboard.domain.Member;
-import com.yjstudy.myboard.repository.BoardRepository;
 import com.yjstudy.myboard.service.BoardService;
 import com.yjstudy.myboard.service.MemberService;
 import com.yjstudy.myboard.web.form.BoardForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Optional;
 
 import static com.yjstudy.myboard.web.SessionConst.LOGIN_MEMBER;
 
@@ -26,7 +23,6 @@ import static com.yjstudy.myboard.web.SessionConst.LOGIN_MEMBER;
 public class BoardController {
 
     private final BoardService boardService;
-    private final MemberService memberService;
 
     /**
      * 게시글 등록 폼 열기
