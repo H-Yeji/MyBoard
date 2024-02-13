@@ -30,6 +30,7 @@
             <th th:text="#{label.board.id}">No</th>
             <th th:text="#{label.board.title}">Title</th>
             <th th:text="#{label.board.writer}">Writer</th>
+            <th th:text="#{label.board.date}">Date</th>
           </tr>
           </thead>
           <tbody>
@@ -39,6 +40,7 @@
               <a th:text = "${board.title}" th:href="@{/boards/{id}(id=${board.id})}">제목입니다.</a>
             </td>
             <td th:text = "${board.writer}">작성자입니다.</td>
+            <td th:text = "${#temporals.format(board.createdDateTime, 'yyyy-MM-dd HH:mm:ss')}">날짜 및 시간입니다.</td>
           </tr>
           </tbody>
         </table>

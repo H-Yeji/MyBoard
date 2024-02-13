@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import java.time.LocalDateTime;
+
 import static com.yjstudy.myboard.web.SessionConst.LOGIN_MEMBER;
 
 @Controller
@@ -37,7 +39,7 @@ public class BoardController {
 
         if (loginMember != null) {
             boardForm.setWriter(loginMember.getLoginId()); //session에서 찾아온 회원id를 boardForm에 뿌리기
-            log.info("작성자 : ", loginMember.getLoginId());
+            log.info("작성자 : {}", loginMember.getLoginId());
         }
 
         model.addAttribute("boardForm", boardForm);
@@ -54,6 +56,7 @@ public class BoardController {
         board.setWriter(form.getWriter());
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
+        board.setCreatedDateTime(LocalDateTime.now());
 
         boardService.addPost(board);
 
