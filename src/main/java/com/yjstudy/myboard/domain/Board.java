@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter @Setter
 public class Board {
@@ -19,4 +21,6 @@ public class Board {
     private String title;
 
     private String content;
+
+    private LocalDateTime createdDateTime;
 }
