@@ -14,7 +14,7 @@
       <div class="py-1 text-center">
         <h2 th:text="#{page.updateBoardForm}">게시글 상세</h2>
       </div>
-      <form role="form" th:object="${boardForm}" method="post">
+      <form role="form" th:object="${boardForm}" method="post" enctype="multipart/form-data">
         <div class="form-group">
           <label th:for="writer" th:text="#{label.board.writer}">작성자</label>
           <input type="text" th:field="*{writer}" class="form-control" readonly>
@@ -30,6 +30,10 @@
                     placeholder="내용을 입력하세요"></textarea>
         </div>
         <br/>
+        <div class="form-group">
+          <label th:for="attachFile" th:text="#{label.board.file}">첨부 파일</label>
+          <input type="file" th:field="*{attachFile}" class="form-control-file" />
+        </div>
         <br/>
         <div class="row">
           <div class="col">
