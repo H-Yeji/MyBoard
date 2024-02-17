@@ -1,13 +1,12 @@
 package com.yjstudy.myboard.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -21,6 +20,12 @@ public class Board {
     private String title;
 
     private String content;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private UploadFile attachFile;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     private LocalDateTime createdDateTime;
 }
