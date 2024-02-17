@@ -1,21 +1,34 @@
 package com.yjstudy.myboard.web.controller;
 
 import com.yjstudy.myboard.domain.Board;
+import com.yjstudy.myboard.domain.Comment;
 import com.yjstudy.myboard.domain.Member;
+import com.yjstudy.myboard.domain.UploadFile;
+import com.yjstudy.myboard.file.FileStore;
 import com.yjstudy.myboard.service.BoardService;
-import com.yjstudy.myboard.service.MemberService;
+import com.yjstudy.myboard.service.CommentService;
 import com.yjstudy.myboard.web.form.BoardForm;
+import com.yjstudy.myboard.web.form.CommentForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
 
-
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.yjstudy.myboard.web.SessionConst.LOGIN_MEMBER;
 
@@ -25,6 +38,8 @@ import static com.yjstudy.myboard.web.SessionConst.LOGIN_MEMBER;
 public class BoardController {
 
     private final BoardService boardService;
+    private final FileStore fileStore;
+    private final CommentService commentService;
 
     /**
      * 게시글 등록 폼 열기
@@ -50,12 +65,15 @@ public class BoardController {
      * 게시글 등록
      */
     @PostMapping("/boards/new")
-    public String registerPost(@ModelAttribute("boardForm") BoardForm form, RedirectAttributes redirectAttributes) {
+    public String registerPost(@ModelAttribute("boardForm") BoardForm form, RedirectAttributes redirectAttributes) throws IOException {
+
+        UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
 
         Board board = new Board();
         board.setWriter(form.getWriter());
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
+        board.setAttachFile(attachFile);
         board.setCreatedDateTime(LocalDateTime.now());
 
         boardService.addPost(board);
@@ -91,8 +109,15 @@ public class BoardController {
         HttpSession session = request.getSession(false);
         Member loginMember = (Member) session.getAttribute(LOGIN_MEMBER);
 
+        //게시글 댓글 가져오기
+        List<Comment> comments = commentService.commentList(id);
+        //댓글 작성 폼
+        CommentForm commentForm = new CommentForm();
+
         model.addAttribute("board", board);
         model.addAttribute("member", loginMember);
+        model.addAttribute("comments", comments);
+        model.addAttribute("commentForm", commentForm);
 
         return "boards/boardView";
     }
@@ -115,16 +140,23 @@ public class BoardController {
      * 게시글 수정 폼
      */
     @GetMapping("/boards/{id}/edit")
-    public String boardEditForm(@PathVariable int id, Model model) {
+    public String boardEditForm(@PathVariable int id, Model model) throws IOException {
 
-        Board board = boardService.detail(id); //id로 게시물 찾아옴
+        //id로 게시물 찾아오기
+        Board board = boardService.detail(id);
+        //게시글의 첨부파일 정보 가져오기
+        UploadFile attachFile = fileStore.storeFile((MultipartFile) board.getAttachFile());
 
-        BoardForm form = new BoardForm();
-        form.setWriter(board.getWriter());
-        form.setTitle(board.getTitle());
-        form.setContent(board.getContent());
+        if (attachFile != null) {
+            BoardForm form = new BoardForm();
+            form.setWriter(board.getWriter());
+            form.setTitle(board.getTitle());
+            form.setContent(board.getContent());
+            form.setAttachFile((MultipartFile) attachFile); //지금 여기가 문제인 것으로 추측 (uploadFile형태인 attachFile을 multipart로 캐스팅x)
 
-        model.addAttribute("boardForm", form);
+            model.addAttribute("boardForm", form);
+
+        }
         return "boards/updateBoardForm";
     }
 
@@ -135,11 +167,34 @@ public class BoardController {
     public String boardEdit(@PathVariable int id, @ModelAttribute("boardForm") BoardForm boardForm,
                             RedirectAttributes redirectAttributes) {
 
-        boardService.update(id, boardForm.getTitle(), boardForm.getContent());
+        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), (UploadFile) boardForm.getAttachFile());
 
         redirectAttributes.addAttribute("boardId", id);
         redirectAttributes.addFlashAttribute("result", "modifyOK");
 
         return "redirect:/boards/{boardId}";
+    }
+
+    /**
+     * 파일 다운로드
+     */
+    @GetMapping("/attach/{id}")
+    public ResponseEntity<Resource> downloadAttach(@PathVariable int id) throws MalformedURLException {
+
+        Board board = boardService.detail(id); //id로 해당 게시글 찾아오기
+        String storeFileName = board.getAttachFile().getStoreFileName(); //저장소 파일명
+        String uploadFileName = board.getAttachFile().getUploadFileName(); //original 파일명
+
+        UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName)); //url 경로 생성
+
+        //original 파일명의 특수 문자를 올바르게 인코딩
+        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+        //응답을 위한 content_disposition 헤더값 생성
+        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
+
+        //상태가 200ok인 responseEntity를 구성하고 반환
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
     }
 }
