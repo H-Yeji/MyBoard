@@ -1,6 +1,7 @@
 package com.yjstudy.myboard.service;
 
 import com.yjstudy.myboard.domain.Board;
+import com.yjstudy.myboard.domain.UploadFile;
 import com.yjstudy.myboard.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,7 @@ public class BoardService {
      * 게시글 수정 -> 변경 감지 기능 사용
      */
     @Transactional
-    public void update(int id, String title, String content) {
+    public void update(int id, String title, String content, UploadFile file) {
 
         Optional<Board> board = boardRepository.findById(id);
 
@@ -55,6 +56,7 @@ public class BoardService {
             Board findPost = board.get();
             findPost.setTitle(title);
             findPost.setContent(content);
+            findPost.setAttachFile(file);
         }
         else {
             log.warn("Board with id {} not found", id);
