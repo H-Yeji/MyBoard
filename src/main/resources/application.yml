@@ -20,4 +20,6 @@ logging.level:
   org.hibernate.SQL: debug
   org.hibernate.orm.jdbc.bind: trace
 
+file:
+  dir: C:/study_spring_makeboard/myboard_file/
 
