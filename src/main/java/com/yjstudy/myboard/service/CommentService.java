@@ -8,12 +8,14 @@ import com.yjstudy.myboard.repository.CommentRepository;
 import com.yjstudy.myboard.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentService {
 
     private final MemberRepository memberRepository;
@@ -23,6 +25,7 @@ public class CommentService {
     /**
      * 댓글 작성
      */
+    @Transactional
     public Long writeComment(Comment comment, int boardId, String loginId) {
 
         //회원 찾아오기
