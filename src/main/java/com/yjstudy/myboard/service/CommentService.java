@@ -7,12 +7,14 @@ import com.yjstudy.myboard.repository.BoardRepository;
 import com.yjstudy.myboard.repository.CommentRepository;
 import com.yjstudy.myboard.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -58,5 +60,31 @@ public class CommentService {
         return comments;
     }
 
+    /**
+     * 댓글 삭제
+     */
+    @Transactional
+    public void commentDelete(Long id) {
+
+        commentRepository.deleteById(id);
+
+    }
+
+    /**
+     * 댓글 수정
+     */
+    @Transactional
+    public void commentUpdate(Long id, String content) {
+
+        Optional<Comment> comment = commentRepository.findById(id);
+
+        if (comment.isPresent()) {
+            Comment findComment = comment.get();
+            findComment.setContent(content);
+        }
+        else {
+            log.warn("comment with id {} not found", id);
+        }
+    }
 
 }
