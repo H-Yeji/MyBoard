@@ -56,7 +56,11 @@ public class BoardService {
             Board findPost = board.get();
             findPost.setTitle(title);
             findPost.setContent(content);
-            findPost.setAttachFile(file);
+
+            if (file != null) {
+                findPost.setAttachFile(file);
+            }
+
         }
         else {
             log.warn("Board with id {} not found", id);

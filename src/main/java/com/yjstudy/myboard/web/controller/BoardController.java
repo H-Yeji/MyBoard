@@ -144,18 +144,18 @@ public class BoardController {
 
         //id로 게시물 찾아오기
         Board board = boardService.detail(id);
-        //게시글의 첨부파일 정보 가져오기
-        UploadFile attachFile = fileStore.storeFile((MultipartFile) board.getAttachFile());
 
-        if (attachFile != null) {
+        if (board != null) {
             BoardForm form = new BoardForm();
             form.setWriter(board.getWriter());
             form.setTitle(board.getTitle());
             form.setContent(board.getContent());
-            form.setAttachFile((MultipartFile) attachFile); //지금 여기가 문제인 것으로 추측 (uploadFile형태인 attachFile을 multipart로 캐스팅x)
 
+            // 파일이 존재할 때만 파일 가져오기 -> null일 경우는 가져오지 않도록
+            if (board.getAttachFile() != null) {
+                UploadFile attachFile = fileStore.storeFile((MultipartFile) board.getAttachFile());
+            }
             model.addAttribute("boardForm", form);
-
         }
         return "boards/updateBoardForm";
     }
@@ -165,9 +165,16 @@ public class BoardController {
      */
     @PostMapping("/boards/{id}/edit")
     public String boardEdit(@PathVariable int id, @ModelAttribute("boardForm") BoardForm boardForm,
-                            RedirectAttributes redirectAttributes) {
+                            RedirectAttributes redirectAttributes) throws IOException {
 
-        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), (UploadFile) boardForm.getAttachFile());
+        MultipartFile file = boardForm.getAttachFile();
+        UploadFile uploadFile = null;
+
+        if (file != null && !file.isEmpty()) {
+            uploadFile = fileStore.storeFile(file);
+        }
+
+        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), uploadFile);
 
         redirectAttributes.addAttribute("boardId", id);
         redirectAttributes.addFlashAttribute("result", "modifyOK");
