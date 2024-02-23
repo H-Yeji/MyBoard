@@ -5,13 +5,13 @@ import com.yjstudy.myboard.domain.Comment;
 import com.yjstudy.myboard.domain.Member;
 import com.yjstudy.myboard.service.BoardService;
 import com.yjstudy.myboard.service.CommentService;
-import com.yjstudy.myboard.service.MemberService;
 import com.yjstudy.myboard.web.form.CommentForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +25,11 @@ import static com.yjstudy.myboard.web.SessionConst.LOGIN_MEMBER;
 public class CommentController {
 
     private final BoardService boardService;
-    private final MemberService memberService;
     private final CommentService commentService;
 
+    /**
+     * 댓글 작성 처리
+     */
     @PostMapping("/boards/{id}/comment") //boardId
     public String addComment(@PathVariable int id, @ModelAttribute("commentForm") CommentForm form,
                              HttpServletRequest request, RedirectAttributes redirectAttributes) {
@@ -51,4 +53,20 @@ public class CommentController {
 
         return "redirect:/boards/{boardId}";
     }
+
+    /**
+     * 댓글 삭제
+     */
+    @GetMapping("/boards/{id}/comment/{commentId}/delete")
+    public String commentDelete(@PathVariable int id, @PathVariable Long commentId, RedirectAttributes redirectAttributes) {
+
+        log.info("댓글 삭제 메서드 실행");
+        commentService.commentDelete(commentId);
+        log.info("댓글 삭제 메서드 성공");
+        redirectAttributes.addAttribute("boardId", id);
+
+        return "redirect:/boards/{boardId}";
+    }
+
+
 }
