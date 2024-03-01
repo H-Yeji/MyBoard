@@ -7,6 +7,7 @@ import com.yjstudy.myboard.domain.UploadFile;
 import com.yjstudy.myboard.file.FileStore;
 import com.yjstudy.myboard.service.BoardService;
 import com.yjstudy.myboard.service.CommentService;
+import com.yjstudy.myboard.service.UploadFileService;
 import com.yjstudy.myboard.web.form.BoardForm;
 import com.yjstudy.myboard.web.form.CommentForm;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,6 +41,7 @@ public class BoardController {
     private final BoardService boardService;
     private final FileStore fileStore;
     private final CommentService commentService;
+    private final UploadFileService uploadFileService;
 
     /**
      * 게시글 등록 폼 열기
@@ -67,14 +69,17 @@ public class BoardController {
     @PostMapping("/boards/new")
     public String registerPost(@ModelAttribute("boardForm") BoardForm form, RedirectAttributes redirectAttributes) throws IOException {
 
-        UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
 
         Board board = new Board();
         board.setWriter(form.getWriter());
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
-        board.setAttachFile(attachFile);
         board.setCreatedDateTime(LocalDateTime.now());
+
+        if (form.getAttachFile() != null) {
+            UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
+            board.setAttachFile(attachFile);
+        }
 
         boardService.addPost(board);
 
@@ -152,9 +157,9 @@ public class BoardController {
             form.setContent(board.getContent());
 
             // 파일이 존재할 때만 파일 가져오기 -> null일 경우는 가져오지 않도록
-            if (board.getAttachFile() != null) {
-                UploadFile attachFile = fileStore.storeFile((MultipartFile) board.getAttachFile());
-            }
+            /*if (board.getAttachFile() != null) {
+                UploadFile attachFile = fileStore.storeFile((MultipartFile) board.getAttachFile()); //casting 에러
+            }*/
             model.addAttribute("boardForm", form);
         }
         return "boards/updateBoardForm";
@@ -170,8 +175,16 @@ public class BoardController {
         MultipartFile file = boardForm.getAttachFile();
         UploadFile uploadFile = null;
 
-        if (file != null && !file.isEmpty()) {
+        if (file != null && !file.isEmpty()) { //수정할 파일이 있다면
+            //새로운 파일 저장
             uploadFile = fileStore.storeFile(file);
+
+            //기존 파일이 존재하면 삭제
+            Board existingBoard = boardService.detail(id);
+            UploadFile existingFile = existingBoard.getAttachFile();
+            if (existingFile != null) {
+                fileStore.deleteFile(existingFile.getStoreFileName(), existingFile);
+            }
         }
 
         boardService.update(id, boardForm.getTitle(), boardForm.getContent(), uploadFile);

@@ -1,9 +1,12 @@
 package com.yjstudy.myboard.file;
 
 import com.yjstudy.myboard.domain.UploadFile;
+import com.yjstudy.myboard.service.UploadFileService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -15,6 +18,9 @@ public class FileStore {
 
     @Value("${file.dir}")
     private String fileDir;
+
+    @Autowired
+    private UploadFileService uploadFileService;
 
     public String getFullPath(String filename) {
         return fileDir + filename;
@@ -31,6 +37,24 @@ public class FileStore {
 
         multipartFile.transferTo(new File(getFullPath(storeFileName)));
         return new UploadFile(uploadFileName, storeFileName);
+    }
+
+    @Transactional
+    public void deleteFile(String storeFileName, UploadFile existingFile) {
+        File file = new File(getFullPath(storeFileName));
+        if (file.exists()) {
+            if (file.delete()) {
+                log.info("File deleted successfully: {}", storeFileName);
+
+                // db에서 삭제
+                uploadFileService.deleteFile(existingFile.getId());
+                log.info("Database entry deleted successfully for fileId: {}", existingFile.getId());
+            } else {
+                log.warn("Failed to delete file: {}", storeFileName);
+            }
+        } else {
+            log.warn("File not found: {}", storeFileName);
+        }
     }
 
     private String createStoreFileName(String originalFileName) {
