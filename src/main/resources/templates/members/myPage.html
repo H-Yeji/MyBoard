@@ -30,19 +30,11 @@
         </div>
         <br/>
 
-        <div class="row">
-          <div class="col">
-            <button class="w-100 btn btn-primary btn-lg"
-                    onclick="location.href='editInfo.html'"
-                    th:onclick="|location.href='@{/members/{id}/edit (id=${member.id})}'|"
-                    type="button" th:text="#{button.edit}">Edit</button>
-          </div>
-          <div class="col">
-            <button class="w-100 btn btn-primary btn-lg"
-                    onclick="location.href='editPassword.html'"
-                    th:onclick="|location.href='@{/members/{id}/pwedit (id=${member.id})}'|"
-                    type="button" th:text="#{button.changePW}">change password</button>
-          </div>
+        <div>
+          <button class="w-100 btn btn-primary btn-lg"
+                  onclick="location.href='editInfo.html'"
+                  th:onclick="|location.href='@{/members/{id}/edit (id=${member.id})}'|"
+                  type="button" th:text="#{button.edit}">Edit</button>
         </div>
       </form>
 
