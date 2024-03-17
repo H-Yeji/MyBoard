@@ -17,7 +17,7 @@ spring 공부를 시작하고 배운 것을 직접 적용할 수 있는 프로�
 - `H2 Database 2.1.214`
 
 ## ✏️ API및 상세 과정
-https://www.notion.so/CRUD-e812902dd08c4eda87d7265137fb7d79
+https://tender-cabbage-bb4.notion.site/CRUD-0df9a07b3cad4bcd8f454871c4b0174f?pvs=4
 
 ## 📂 마치며
 ### ✔️ 보안사항 및 추가기능
